@@ -11,11 +11,14 @@ import {
 import { db } from "../components/firebase.js";
 import { auth } from "../components/firebase.js";
 
+
 const Notes = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [notes, setNotes] = useState([]);
   const [editingId, setEditingId] = useState(null);
+  const [selectedNote, setSelectedNote] = useState(null);
+
 
   const user = auth.currentUser;
 
@@ -136,17 +139,26 @@ const Notes = () => {
         {notes.map((note) => (
           <div
             key={note.id}
-            className="bg-white p-5 rounded-2xl shadow hover:shadow-lg transition"
+            className="bg-white p-5 rounded-2xl shadow hover:shadow-lg transition max-h-64 flex flex-col"
           >
             <h3 className="text-lg font-semibold text-gray-800">
               {note.title}
             </h3>
 
-            <p className="text-gray-600 mt-2 whitespace-pre-wrap">
-              {note.content}
-            </p>
+            <div className="mt-2 text-gray-600 line-clamp-4 whitespace-pre-wrap">
+  {note.content}
+</div>
 
-            <div className="flex justify-end gap-4 mt-4">
+            {note.content.length > 150 && (
+  <button
+    onClick={() => setSelectedNote(note)}
+    className="text-sm text-green-600 mt-2 hover:underline"
+  >
+    View more
+  </button>
+)}
+
+            <div className="flex justify-end gap-4 mt-auto pt-4">
               <button
                 onClick={() => handleEdit(note)}
                 className="text-blue-500 hover:underline text-sm"
@@ -165,6 +177,27 @@ const Notes = () => {
         ))}
       </div>
     )}
+    {selectedNote && (
+  <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div className="bg-white w-full max-w-lg rounded-2xl p-6 relative shadow-lg">
+      <button
+        onClick={() => setSelectedNote(null)}
+        className="absolute top-3 right-3 text-gray-500 hover:text-black text-xl"
+      >
+        ×
+      </button>
+
+      <h3 className="text-2xl font-semibold mb-4">
+        {selectedNote.title}
+      </h3>
+
+      <div className="max-h-96 overflow-y-auto whitespace-pre-wrap text-gray-700">
+        {selectedNote.content}
+      </div>
+    </div>
+  </div>
+)}
+
   </div>
 );
 
