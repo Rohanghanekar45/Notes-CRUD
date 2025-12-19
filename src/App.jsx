@@ -3,8 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./components/firebase.js";
 
-import Login from "./pages/login.jsx";
-import Register from "./pages/register.jsx";
+import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
 import Home from "./pages/Home.jsx";
 import Notes from "./pages/Notes.jsx";
 
